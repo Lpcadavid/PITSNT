@@ -168,7 +168,7 @@ with tab_datos:
         # Crear DataFrame
         df_users = pd.DataFrame(users_data)
         # Reordenar las columnas
-        column_order = ['nombre', 'email', 'edad', 'ciudad']
+        column_order = ['name', 'email', 'edad', 'ciudad']
         df_users = df_users.reindex(columns=column_order)   
 
         st.dataframe(df_users)
@@ -191,7 +191,7 @@ with tab_datos:
 with tab_Análisis_Exploratorio:    
     st.title("Análisis Exploratorio")
     st.markdown("""
-    * Muestra las primeras 5 filas del DataFrame.  **(df.head())**
+    * Muestra las primeras 5 filas del DataFrame.  **(df.head())**                              
     * Muestra la cantidad de filas y columnas del DataFrame.  **(df.shape)**
     * Muestra los tipos de datos de cada columna.  **(df.dtypes)**
     * Identifica y muestra las columnas con valores nulos. **(df.isnull().sum())**
@@ -199,7 +199,46 @@ with tab_Análisis_Exploratorio:
     * Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada. **(df['columna_categorica'].value_counts())** 
     * Otra información importante  
     """)
-    
+
+    st.write("Primeras 5 filas de la tabla clientes")
+    st.dataframe(df_users.head())
+
+    st.write("Primeras 5 filas de la tabla Productos")
+    st.dataframe(df_products.head())
+
+    st.write("Cantidad de filas y columnas del Clientes")
+    st.write(df_users.shape)
+
+    st.write("Cantidad de filas y columnas del Productos")
+    st.write(df_products.shape)
+
+    # Mostrar los tipos de datos de cada columna
+    st.write("**Tipos de datos Tabla Clientes:**")
+    st.write(df_users.dtypes)
+
+    st.write("**Tipos de datos Tabla Productos:**")
+    st.write(df_products.dtypes)
+
+    # Identificar y mostrar las columnas con valores nulos
+    st.write("**Valores nulos por columna:**")
+    st.write(df_users.isnull().sum())
+
+    st.write("**Valores nulos por columna:**")
+    st.write(df_products.isnull().sum())
+
+    # Mostrar un resumen estadístico de las columnas numéricas
+    st.write("**Resumen estadístico Clientes:**")
+    st.write(df_users.describe())
+
+    st.write("**Resumen estadístico Productos:**")
+    st.write(df_products.describe())
+
+    # Crear una lista de las columnas categóricas
+    columnas_categoricas = df_users.select_dtypes(include=['object']).columns.tolist()
+    columnas_categoricas = df_products.select_dtypes(include=['object']).columns.tolist()
+
+ 
+
     
 #----------------------------------------------------------
 #Analítica 2
@@ -212,9 +251,12 @@ with tab_Filtrado_Básico:
         * Permite elegir un operador de comparación (igual, diferente, mayor que, menor que). **(st.radio)**
         * Muestra los datos filtrados en una tabla. **(st.dataframe)** 
         """)
+st.write("**Usuarios mayores de 30:**")
+usuarios_mayores_30 = df_users[df_users['edad'] > 30]
+print(usuarios_mayores_30)
 
 #----------------------------------------------------------
-#Analítica 2
+#Analítica 3
 #----------------------------------------------------------
 with tab_Filtro_Final_Dinámico:
         st.title("Filtro Final Dinámico")
