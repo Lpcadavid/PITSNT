@@ -35,22 +35,35 @@ with tad_descripcion:
 
     ### Introducción
 
-    -   ¿Qué es el proyecto?
-    -   ¿Cuál es el objetivo principal?
-    -   ¿Por qué es importante?
+    -   El proyecto consiste en el desarrollo de una base de datos en Python para gestionar los productos, clientes y ventas de una pequeña empresa de accesorios. Esta base de datos permitirá llevar un control más eficiente y organizado de la información.
+    -   El objetivo principal es crear una herramienta que facilite la gestión de inventario y relaciones con los clientes, mejorando la toma de decisiones y optimizando procesos.
+    -   Una buena gestión de datos es crucial para cualquier negocio. Permite identificar tendencias, gestionar el stock de manera efectiva y mejorar el servicio al cliente, lo que puede resultar en un aumento de las ventas y satisfacción del cliente.
+                
 
     ### Desarrollo
 
-    -   Explicación detallada del proyecto
-    -   Procedimiento utilizado
-    -   Resultados obtenidos
+    -   La base de datos se diseñará para almacenar información sobre productos (nombre, categoría, precio, stock), clientes (nombre, contacto, historial de compras) y ventas (fecha, productos vendidos, monto total). Utilizaré Python con una biblioteca como SQLite para crear y manejar la base de datos.
+    -   Análisis de requisitos: Definir qué información es esencial para el negocio.
+        Diseño de la base de datos: Estructurar las tablas y relaciones entre ellas.
+        Implementación: Programar la base de datos en Python utilizando SQLite. Incluirá funcionalidades como agregar, editar y eliminar productos, así como registrar ventas y consultar datos.
+        Pruebas: Verificar que todas las funciones trabajen correctamente y que los datos se almacenen y recuperen adecuadamente.
+                
+    -   Se espera obtener una base de datos funcional que permita realizar un seguimiento en tiempo real del inventario y las ventas. Además, se generarán informes que ayuden a identificar qué productos son más populares y cuáles necesitan ser reabastecidos.
 
     ### Conclusión
 
     -   Resumen de los resultados
+        Se logró desarrollar una base de datos que organiza de manera efectiva la información de la empresa. Esto permitirá una gestión más ágil y accesible de los datos.
     -   Logros alcanzados
+        Implementación exitosa de la base de datos.
+        Capacitación en el uso de Python y SQLite.
+        Desarrollo de un sistema que facilita el seguimiento de ventas y clientes.
     -   Dificultades encontradas
+        Desafíos en la estructuración inicial de la base de datos.
+        Problemas de compatibilidad con diferentes versiones de bibliotecas.
+        Aprendizaje de nuevas tecnologías que inicialmente resultaron complejas.
     -   Aportes personales
+        Este proyecto me ha permitido mejorar mis habilidades en programación y gestión de bases de datos. También he aprendido sobre la importancia de la organización y la planificación en el desarrollo de un sistema que responda a las necesidades reales de un negocio.
     ''')
 
 #----------------------------------------------------------
