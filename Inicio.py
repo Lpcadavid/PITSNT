@@ -19,12 +19,12 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**Lina Patricia Cadavid **")
-    st.write("Nuevas Tecnologias")
+    st.write("**Lina Patricia Cadavid**")
+    st.write("Estudiante Nuevas Tecnologias")
 
 with col2:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**Carolo Eliana Gonzalez**")
+    st.write("**Carol Eliana Gonzalez**")
     st.write("Estudiante Nuevas Tecnologias")
 
 with col3:

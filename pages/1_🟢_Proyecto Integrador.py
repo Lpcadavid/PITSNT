@@ -108,14 +108,11 @@ with tab_Generador:
             product_type = random.choice(categories[category])
             
             product = {
-            'nombre': product_type,
-            'categoria': category,
-            'descripcion': fake.text(max_nb_chars=100),  # Descripción aleatoria
-            'cantidad': random.randint(0, 100),
-            'precioCompra': round(random.uniform(1000, 5000), -3),
-            'precioVenta': round(random.uniform(5000, 10000), -3),
-            'fecha': firestore.SERVER_TIMESTAMP  # Fecha y hora del servidor
-        }
+                'nombre': product_type,
+                'precio': round(random.uniform(10000, 1000000), -3),  # Precios en pesos colombianos
+                'categoria': category,
+                'stock': random.randint(0, 100)
+            }
             products.append(product)
         return products
 
@@ -251,9 +248,7 @@ with tab_Filtrado_Básico:
         * Permite elegir un operador de comparación (igual, diferente, mayor que, menor que). **(st.radio)**
         * Muestra los datos filtrados en una tabla. **(st.dataframe)** 
         """)
-st.write("**Usuarios mayores de 30:**")
-usuarios_mayores_30 = df_users[df_users['edad'] > 30]
-print(usuarios_mayores_30)
+
 
 #----------------------------------------------------------
 #Analítica 3
