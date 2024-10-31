@@ -1,6 +1,11 @@
 import streamlit as st
 from PIL import Image
 
+import os
+image_path = os.path.join(os.path.dirname(__file__), "static", "Santaellalogo.png")
+image = Image.open(image_path)
+
+
 st.set_page_config(layout="wide", page_title="SantaElla", page_icon="<3")
 
 
