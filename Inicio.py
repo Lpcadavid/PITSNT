@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 
 import os
-image_path = os.path.join(os.path.dirname(__file__), "static", "Santaellalogo.png")
+image_path = os.path.join(os.path.dirname(__file__), "static", "Santaellalogo.jpg")
 image = Image.open(image_path)
 
 
@@ -14,7 +14,7 @@ st.title("Proyecto Integrador: Inventario Santaella")
 st.subheader("Santaella Oficial")
 
 # Imagen de fondo
-image = Image.open(".\\static\\Santaellalogo.png") 
+image = Image.open(".\\static\\Santaellalogo.jpg") 
 st.image(image, width=700, use_column_width=True)  
 
 # Integrantes
