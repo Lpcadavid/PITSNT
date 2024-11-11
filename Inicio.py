@@ -10,8 +10,8 @@ st.title("Proyecto Integrador: Inventario Santaella")
 st.subheader("Santaella Oficial")
 
 # Imagen de fondo
-image = Image.open(".\static\\Santaellalogo.jpg") 
-st.image(image, width=700, use_column_width=True)  
+#image = Image.open(".\static\\Santaellalogo.jpg") 
+#st.image(image, width=700, use_column_width=True)  
 
 # Integrantes
 st.header("Nuestro Equipo")
