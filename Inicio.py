@@ -1,10 +1,6 @@
 import streamlit as st
 from PIL import Image
 
-import os
-image_path = os.path.join(os.path.dirname(__file__), "static", "Santaellalogo.jpg")
-image = Image.open(image_path)
-
 
 st.set_page_config(layout="wide", page_title="SantaElla", page_icon="<3")
 
@@ -14,7 +10,7 @@ st.title("Proyecto Integrador: Inventario Santaella")
 st.subheader("Santaella Oficial")
 
 # Imagen de fondo
-image = Image.open(".\\static\\Santaellalogo.jpg") 
+image = Image.open(".\static\\Santaellalogo.jpg") 
 st.image(image, width=700, use_column_width=True)  
 
 # Integrantes
@@ -83,9 +79,7 @@ Con “Santaella”, no solo buscamos embellecer a nuestras clientas con piezas 
 
 
 
-#st.write("""
-#[Agrega la información adicional que consideres relevante.]
-#""")
+
 
 
 

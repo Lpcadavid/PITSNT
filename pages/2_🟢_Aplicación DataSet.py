@@ -1,85 +1,64 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
+# Configuración de la página
 st.set_page_config(layout="wide")
+st.title("Análisis de Ventas Interactivo")
 
-st.subheader("Análisis y Filtrado de Datos")
+# Carga de Datos
+try:
+    # Cargar el dataset desde el archivo cargado
+    df = pd.read_csv('./static/datasets/ventas.csv')
+    st.success("Datos cargados exitosamente.")
+except FileNotFoundError:
+    st.error("No se pudo encontrar el archivo 'ventas.csv'. Verifica la ruta.")
+    st.stop()  # Detener la ejecución si no se encuentran los datos
 
-df = pd.read_csv('./static/datasets/ventas.csv')
+# Renombrar columnas para que coincidan con el código original
+df.rename(columns={'Producto': 'articulo', 'Cantidad': 'cantidad', 'Ciudad': 'ciudad', 'Precio': 'precio'}, inplace=True)
 
+# Verificar columnas esenciales
+if not {'articulo', 'cantidad', 'ciudad'}.issubset(df.columns):
+    st.error("El dataset no contiene las columnas necesarias ('articulo', 'cantidad', 'ciudad').")
+    st.stop()
 
-tad_descripcion, tab_Análisis_Exploratorio, tab_Filtrado_Básico, tab_Filtro_Final_Dinámico = st.tabs(["Descripción", "Análisis Exploratorio", "Filtrado Básico", "Filtro Final Dinámico"])
+# Filtro por ciudad
+ciudades = df['ciudad'].unique()
+ciudad_seleccionada = st.multiselect("Selecciona una o más ciudades para el análisis:", ciudades, default=ciudades)
 
-#----------------------------------------------------------
-#Generador de datos
-#----------------------------------------------------------
-with tad_descripcion:      
+# Filtro por artículo
+articulos = df['articulo'].unique()
+articulo_seleccionado = st.multiselect("Selecciona uno o más artículos para el análisis:", articulos, default=articulos)
 
-    st.markdown('''
-    ## Plantilla Básica para Proyecto Integrador
+# Filtrar el dataset según selección
+df_filtrado = df[(df['ciudad'].isin(ciudad_seleccionada)) & (df['articulo'].isin(articulo_seleccionado))]
 
-    ### Introducción
+# Selección del tipo de gráfico
+tipo_grafico = st.selectbox("Selecciona el tipo de gráfico", ["Barras", "Pastel"])
 
-    -   ¿Qué es el proyecto?
-    -   ¿Cuál es el objetivo principal?
-    -   ¿Por qué es importante?
+# Generar gráfico interactivo
+st.subheader("Artículos Más Vendidos (Personalizado)")
+ventas_articulos = df_filtrado.groupby("articulo")["cantidad"].sum().sort_values(ascending=False)
 
-    ### Desarrollo
+if tipo_grafico == "Barras":
+    fig_bar = px.bar(ventas_articulos, x=ventas_articulos.index, y=ventas_articulos.values,
+                     title="Top Artículos Vendidos", labels={'x': 'Artículo', 'y': 'Cantidad'})
+    st.plotly_chart(fig_bar, use_container_width=True)
+else:
+    fig_pie = px.pie(ventas_articulos, values=ventas_articulos.values, names=ventas_articulos.index,
+                     title="Distribución de Ventas por Artículo")
+    st.plotly_chart(fig_pie, use_container_width=True)
 
-    -   Explicación detallada del proyecto
-    -   Procedimiento utilizado
-    -   Resultados obtenidos
+# Gráfico de ventas por ciudad
+st.subheader("Participación de Ventas por Ciudad (Personalizado)")
+ventas_ciudad = df_filtrado.groupby("ciudad")["cantidad"].sum()
 
-    ### Conclusión
-
-    -   Resumen de los resultados
-    -   Logros alcanzados
-    -   Dificultades encontradas
-    -   Aportes personales
-    ''')    
-
-#----------------------------------------------------------
-#Analítica 1
-#----------------------------------------------------------
-with tab_Análisis_Exploratorio:    
-    st.title("Análisis Exploratorio")
-    st.markdown("""
-    * Muestra las primeras 5 filas del DataFrame.  **(df.head())**
-    * Muestra la cantidad de filas y columnas del DataFrame.  **(df.shape)**
-    * Muestra los tipos de datos de cada columna.  **(df.dtypes)**
-    * Identifica y muestra las columnas con valores nulos. **(df.isnull().sum())**
-    * Muestra un resumen estadístico de las columnas numéricas.  **(df.describe())**
-    * Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada. **(df['columna_categorica'].value_counts())** 
-    * Otra información importante           
-    """)   
-    
-#----------------------------------------------------------
-#Analítica 2
-#----------------------------------------------------------
-with tab_Filtrado_Básico:
-        st.title("Filtro Básico")
-        st.markdown("""
-        * Permite filtrar datos usando condiciones simples. **(df[df['columna'] == 'valor'])**
-        * Permite seleccionar una columna y un valor para el filtro. **(st.selectbox, st.text_input)**
-        * Permite elegir un operador de comparación (igual, diferente, mayor que, menor que). **(st.radio)**
-        * Muestra los datos filtrados en una tabla. **(st.dataframe)** 
-        """)
-
-#----------------------------------------------------------
-#Analítica 3
-#----------------------------------------------------------
-with tab_Filtro_Final_Dinámico:
-        st.title("Filtro Final Dinámico")
-        st.markdown("""
-        * Muestra un resumen dinámico del DataFrame filtrado. 
-        * Incluye información como los criterios de filtrado aplicados, la tabla de datos filtrados, gráficos y estadísticas relevantes.
-        * Se actualiza automáticamente cada vez que se realiza un filtro en las pestañas anteriores. 
-        """)
-
-
-
-    
-
-
-
-
+if tipo_grafico == "Barras":
+    fig_bar_ciudad = px.bar(ventas_ciudad, x=ventas_ciudad.index, y=ventas_ciudad.values,
+                            title="Distribución de Ventas por Ciudad", labels={'x': 'Ciudad', 'y': 'Cantidad'})
+    st.plotly_chart(fig_bar_ciudad, use_container_width=True)
+else:
+    fig_pie_ciudad = px.pie(ventas_ciudad, values=ventas_ciudad.values, names=ventas_ciudad.index,
+                            title="Distribución de Ventas por Ciudad")
+    st.plotly_chart(fig_pie_ciudad, use_container_width=True)
