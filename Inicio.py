@@ -1,32 +1,30 @@
 import streamlit as st
 from PIL import Image
 
-
+# Configuración de la página
 st.set_page_config(layout="wide", page_title="SantaElla", page_icon="<3")
 
+# Cargar y mostrar el logo en la parte superior
+image = Image.open("./static/Santaellalogo.jpg")  # Ruta de la imagen
+st.image(image, width=100)  # Ajusta el tamaño del logo, puedes cambiar el valor de width según lo necesites
 
 # Título y subtítulo
 st.title("Proyecto Integrador: Inventario Santaella")
 st.subheader("Santaella Oficial")
 
-# Imagen de fondo
-#image = Image.open(".\static\\Santaellalogo.jpg") 
-#st.image(image, width=700, use_column_width=True)  
-
 # Integrantes
 st.header("Nuestro Equipo")
-
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Lina Patricia Cadavid**")
-    st.write("Estudiante Nuevas Tecnologias")
+    st.write("Estudiante Nuevas Tecnologías")
 
 with col2:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Carol Eliana Gonzalez**")
-    st.write("Estudiante Nuevas Tecnologias")
+    st.write("Estudiante Nuevas Tecnologías")
 
 with col3:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
@@ -42,8 +40,6 @@ with col1:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Jeronimo**")
     st.write("Estudiante Nuevas Tecnológias")
-
-
 
 # Descripción del proyecto
 st.header("Sobre SantaElla")
@@ -76,12 +72,6 @@ Con “Santaella”, no solo buscamos embellecer a nuestras clientas con piezas 
          nuestra empresa con herramientas que optimicen la gestión y potencien el crecimiento. ¡Porque cada detalle cuenta 
          cuando se trata de brillar!]
 """)
-
-
-
-
-
-
 
 # Footer con links
 st.markdown(
