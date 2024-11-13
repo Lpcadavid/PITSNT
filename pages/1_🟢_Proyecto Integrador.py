@@ -4,6 +4,9 @@ import streamlit as st
 import pandas as pd  
 import firebase_admin  
 from firebase_admin import credentials, firestore  
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 st.set_page_config(layout="wide")
 
@@ -24,7 +27,8 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 
-tad_descripcion, tab_Generador, tab_datos, tab_Análisis_Exploratorio, tab_Filtrado_Básico, tab_Filtro_Final_Dinámico = st.tabs(["Descripción", "Generador de datos", "Datos", "Análisis Exploratorio", "Filtrado Básico", "Filtro Final Dinámico"])
+tad_descripcion, tab_Generador, tab_datos, tab_Análisis_Exploratorio, tab_Filtro_Final_Dinámico = st.tabs(["Descripción", "Generador de datos", "Datos", "Análisis Exploratorio", "Filtro Final Dinámico"])
+
 
 #----------------------------------------------------------
 #Generador de datos
@@ -198,54 +202,88 @@ with tab_datos:
 #----------------------------------------------------------
 #Analítica 1
 #----------------------------------------------------------
+# Análisis Exploratorio
 with tab_Análisis_Exploratorio:    
     st.title("Análisis Exploratorio")
     st.markdown("""
-    * Muestra las primeras 5 filas del DataFrame.  **(df.head())**                              
-    * Muestra la cantidad de filas y columnas del DataFrame.  **(df.shape)**
-    * Muestra los tipos de datos de cada columna.  **(df.dtypes)**
+    * Muestra las primeras 5 filas del DataFrame. **(df.head())**
+    * Muestra la cantidad de filas y columnas del DataFrame. **(df.shape)**
+    * Muestra los tipos de datos de cada columna. **(df.dtypes)**
     * Identifica y muestra las columnas con valores nulos. **(df.isnull().sum())**
-    * Muestra un resumen estadístico de las columnas numéricas.  **(df.describe())**
+    * Muestra un resumen estadístico de las columnas numéricas. **(df.describe())**
     * Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada. **(df['columna_categorica'].value_counts())** 
-    * Otra información importante  
+    * Otra información importante
     """)
 
+    # Mostrar las primeras filas
     st.write("Primeras 5 filas de la tabla clientes")
     st.dataframe(df_users.head())
 
     st.write("Primeras 5 filas de la tabla Productos")
     st.dataframe(df_products.head())
 
+    # Estadísticas y análisis básico
     st.write("Cantidad de filas y columnas del Clientes")
     st.write(df_users.shape)
 
     st.write("Cantidad de filas y columnas del Productos")
     st.write(df_products.shape)
 
-    # Mostrar los tipos de datos de cada columna
     st.write("**Tipos de datos Tabla Clientes:**")
     st.write(df_users.dtypes)
 
     st.write("**Tipos de datos Tabla Productos:**")
     st.write(df_products.dtypes)
 
-    # Identificar y mostrar las columnas con valores nulos
-    st.write("**Valores nulos por columna:**")
+    st.write("**Valores nulos por columna en Clientes:**")
     st.write(df_users.isnull().sum())
 
-    st.write("**Valores nulos por columna:**")
+    st.write("**Valores nulos por columna en Productos:**")
     st.write(df_products.isnull().sum())
 
-    # Mostrar un resumen estadístico de las columnas numéricas
+    # Resumen estadístico
     st.write("**Resumen estadístico Clientes:**")
     st.write(df_users.describe())
 
     st.write("**Resumen estadístico Productos:**")
     st.write(df_products.describe())
 
-    # Crear una lista de las columnas categóricas
-    columnas_categoricas = df_users.select_dtypes(include=['object']).columns.tolist()
-    columnas_categoricas = df_products.select_dtypes(include=['object']).columns.tolist()
+    # Crear un gráfico de distribución de edades de los clientes
+    st.subheader("Distribución de Edades de los Clientes")
+    fig, ax = plt.subplots()
+    sns.histplot(df_users['edad'], kde=True, ax=ax, color='skyblue')
+    ax.set_title('Distribución de Edades')
+    ax.set_xlabel('Edad')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
+
+    # Gráfico de categorías de productos
+    st.subheader("Distribución de Categorías de Productos")
+    fig, ax = plt.subplots()
+    sns.countplot(x='categoria', data=df_products, ax=ax, palette='Set2')
+    ax.set_title('Frecuencia de Categorías de Productos')
+    ax.set_xlabel('Categoría')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
+
+    # Gráfico de precios de productos
+    st.subheader("Distribución de Precios de Productos")
+    fig, ax = plt.subplots()
+    sns.histplot(df_products['precio'], kde=True, ax=ax, color='green')
+    ax.set_title('Distribución de Precios de Productos')
+    ax.set_xlabel('Precio')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
+
+    # Gráfico de stock de productos
+    st.subheader("Distribución de Stock de Productos")
+    fig, ax = plt.subplots()
+    sns.histplot(df_products['stock'], kde=True, ax=ax, color='orange')
+    ax.set_title('Distribución de Stock de Productos')
+    ax.set_xlabel('Stock')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
+
 
  
 
@@ -253,25 +291,57 @@ with tab_Análisis_Exploratorio:
 #----------------------------------------------------------
 #Analítica 2
 #----------------------------------------------------------
-with tab_Filtrado_Básico:
-        st.title("Filtro Básico")
-        st.markdown("""
-        * Permite filtrar datos usando condiciones simples. **(df[df['columna'] == 'valor'])**
-        * Permite seleccionar una columna y un valor para el filtro. **(st.selectbox, st.text_input)**
-        * Permite elegir un operador de comparación (igual, diferente, mayor que, menor que). **(st.radio)**
-        * Muestra los datos filtrados en una tabla. **(st.dataframe)** 
-        """)
 
-
-#----------------------------------------------------------
-#Analítica 3
-#----------------------------------------------------------
+# Filtro Final Dinámico
 with tab_Filtro_Final_Dinámico:
-        st.title("Filtro Final Dinámico")
-        st.markdown("""
-        * Muestra un resumen dinámico del DataFrame filtrado. 
-        * Incluye información como los criterios de filtrado aplicados, la tabla de datos filtrados, gráficos y estadísticas relevantes.
-        * Se actualiza automáticamente cada vez que se realiza un filtro en las pestañas anteriores. 
-        """)
+    st.title("Filtro Final Dinámico")
+    st.markdown("""
+    * Muestra un resumen dinámico del DataFrame filtrado. 
+    * Incluye información como los criterios de filtrado aplicados, la tabla de datos filtrados, gráficos y estadísticas relevantes.
+    * Se actualiza automáticamente cada vez que se realiza un filtro en las pestañas anteriores. 
+    """)
+    
+    # Filtro por edad de los clientes
+    edad_min, edad_max = st.slider(
+        "Selecciona el rango de edades de los clientes",
+        min_value=int(df_users['edad'].min()),
+        max_value=int(df_users['edad'].max()),
+        value=(int(df_users['edad'].min()), int(df_users['edad'].max()))
+    )
+    df_users_filtrado = df_users[(df_users['edad'] >= edad_min) & (df_users['edad'] <= edad_max)]
+    
+    # Filtro por ciudad de los clientes
+    ciudades = st.multiselect("Selecciona las ciudades", options=df_users['ciudad'].unique(), default=df_users['ciudad'].unique())
+    df_users_filtrado = df_users_filtrado[df_users_filtrado['ciudad'].isin(ciudades)]
+    
+    # Filtro por categoría de productos
+    categorias = st.multiselect("Selecciona las categorías de productos", options=df_products['categoria'].unique(), default=df_products['categoria'].unique())
+    df_products_filtrado = df_products[df_products['categoria'].isin(categorias)]
+    
+    # Mostrar datos filtrados de clientes
+    st.write("**Clientes Filtrados**")
+    st.dataframe(df_users_filtrado)
+
+    # Mostrar gráficos de clientes filtrados
+    st.subheader("Distribución de Edades de los Clientes Filtrados")
+    fig, ax = plt.subplots()
+    sns.histplot(df_users_filtrado['edad'], kde=True, ax=ax, color='lightblue')
+    ax.set_title('Distribución de Edades Filtradas')
+    ax.set_xlabel('Edad')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
+
+    # Mostrar datos filtrados de productos
+    st.write("**Productos Filtrados**")
+    st.dataframe(df_products_filtrado)
+
+    # Mostrar gráficos de productos filtrados
+    st.subheader("Distribución de Precios de Productos Filtrados")
+    fig, ax = plt.subplots()
+    sns.histplot(df_products_filtrado['precio'], kde=True, ax=ax, color='lightgreen')
+    ax.set_title('Distribución de Precios Filtrados')
+    ax.set_xlabel('Precio')
+    ax.set_ylabel('Frecuencia')
+    st.pyplot(fig)
 
 
