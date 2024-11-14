@@ -30,7 +30,7 @@ st.markdown(
 )
 
 # Título y subtítulo
-st.title("Proyecto Integrador: Inventario Santaella")
+st.title("Proyecto Integrador: Santaella")
 st.subheader("Santaella Oficial")
 
 # Integrantes
