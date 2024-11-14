@@ -38,27 +38,27 @@ st.header("Nuestro Equipo")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.image("./static/Lina.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Lina Patricia Cadavid**")
     st.write("Estudiante Nuevas Tecnologías")
 
 with col2:
-    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.image("./static/Carol.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Carol Eliana Gonzalez**")
     st.write("Estudiante Nuevas Tecnologías")
 
 with col3:
-    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.image("./static/Jose.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**José Castro Molina**")
     st.write("Estudiante Nuevas Tecnológias")
 
 with col2:
-    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.image("./static/Roi.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Roicer Romero**")
     st.write("Estudiante Nuevas Tecnológias")
 
 with col1:
-    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.image("./static/Jero.png", width=200)  # Reemplaza con la ruta de la foto
     st.write("**Jeronimo**")
     st.write("Estudiante Nuevas Tecnológias")
 
