@@ -34,7 +34,10 @@ def read_sheet():
 
 # Función para actualizar la Hoja 2
 def update_sheet(df):
-    body = {'values': df.values.tolist()}
+    # Limpiar los datos reemplazando NaN por cadenas vacías
+    df_cleaned = df.fillna('')  # Reemplazar NaN con cadenas vacías
+    body = {'values': df_cleaned.values.tolist()}  # Convertir el DataFrame a lista de listas
+    
     result = sheet.values().update(
         spreadsheetId=SPREADSHEET_ID, range=RANGE2,
         valueInputOption="USER_ENTERED", body=body).execute()
@@ -47,20 +50,49 @@ if st.button("Analizar datos de Google Sheet"):
     st.header("Datos Hoja 1")
     st.dataframe(df)
     
-    # Realizar consulta sobre los datos
-    # Ejemplo: Filtrar por ciudad (por ejemplo, "Madrid") y agrupar por Producto
-    ciudad = st.selectbox("Seleccionar Ciudad", df['Ciudad'].unique())
-    df_filtrado = df[df['Ciudad'] == ciudad]
+    # Verificar las columnas que están presentes en el DataFrame
+    st.write("Columnas disponibles en el DataFrame:", df.columns)
     
-    # Agrupar los datos por Producto y calcular las ventas totales
-    df_agrupado = df_filtrado.groupby('Producto').agg({'Ventas': 'sum'}).reset_index()
-    st.header(f"Datos agrupados por Producto para {ciudad}")
-    st.dataframe(df_agrupado)
+    # Asegurarnos de que las columnas estén bien formateadas y sin espacios
+    df.columns = df.columns.str.strip()  # Eliminar espacios al principio y final de los nombres de las columnas
+    
+    # Verificar si las columnas 'Cantidad', 'Precio' y 'Ventas' existen
+    if 'Cantidad' in df.columns and 'Precio' in df.columns and 'Ventas' in df.columns:
+        # Convertir las columnas 'Cantidad', 'Precio' y 'Ventas' a valores numéricos si es necesario
+        df['Cantidad'] = pd.to_numeric(df['Cantidad'], errors='coerce')
+        df['Precio'] = pd.to_numeric(df['Precio'], errors='coerce')
+        df['Ventas'] = pd.to_numeric(df['Ventas'], errors='coerce')
+        
+        # Crear una columna de "Ventas Totales" que será el producto de Precio * Cantidad
+        df['Ventas Totales'] = df['Precio'] * df['Cantidad']
+        
+        # Agrupar los datos por Ciudad y Producto y calcular las Ventas Totales
+        df_agrupado = df.groupby(['Ciudad', 'Producto']).agg({'Ventas Totales': 'sum'}).reset_index()
+        
+        # Agrupar los datos por Ciudad y calcular las Ventas Totales
+        df_agrupado_ciudad = df.groupby('Ciudad').agg({'Ventas Totales': 'sum'}).reset_index()
+        
+        # Crear los títulos para cada sección
+        titulo_ciudad_producto = pd.DataFrame([['Resultados de Ventas Totales por Ciudad y Producto']], columns=['Título'])
+        titulo_ciudad = pd.DataFrame([['Resultados de Ventas Totales por Ciudad']], columns=['Título'])
+        
+        # Concatenar los títulos con los resultados correspondientes
+        df_final = pd.concat([titulo_ciudad_producto, df_agrupado, titulo_ciudad, df_agrupado_ciudad], axis=0, ignore_index=True)
+        
+        # Mostrar los resultados
+        st.header("Ventas Totales por Ciudad y Producto")
+        st.dataframe(df_agrupado)
+        
+        st.header("Ventas Totales por Ciudad")
+        st.dataframe(df_agrupado_ciudad)
 
-    # Actualizar la Hoja 2 con el DataFrame procesado
-    result = update_sheet(df_agrupado)
-    st.success(f"Hoja 2 actualizada. {result.get('updatedCells')} celdas actualizadas.")
-    
-    # Mostrar el DataFrame actualizado
-    st.header("Datos actualizados en Hoja 2")
-    st.dataframe(df_agrupado)
+        # Actualizar la Hoja 2 con los datos procesados
+        result = update_sheet(df_final)
+        st.success(f"Hoja 2 actualizada. {result.get('updatedCells')} celdas actualizadas.")
+        
+        # Mostrar el DataFrame actualizado
+        st.header("Datos actualizados en Hoja 2")
+        st.dataframe(df_final)
+        
+    else:
+        st.error("No se encuentran las columnas 'Cantidad', 'Precio' o 'Ventas' en los datos. Verifique la hoja de cálculo.")
